@@ -70,6 +70,12 @@ class Settings(BaseSettings):
     EMOTION_API_KEY: Optional[str] = None
     EMOTION_BASE_URL: Optional[str] = None
     
+    # 批处理配置
+    BATCH_MAX_CONCURRENCY: int = 5  # 批处理并发数，默认复用 MAX_CONCURRENT_USERS
+    BATCH_MAX_RETRIES: int = 2
+    BATCH_RETRY_INTERVAL_SECONDS: int = 3
+    SOURCE_PREVIEW_LENGTH: int = 30
+
     # 流式输出配置
     USE_STREAMING: bool = False  # 默认使用非流式模式，避免被API阻止
 

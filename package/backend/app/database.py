@@ -27,6 +27,7 @@ def init_db():
     try:
         # 导入所有模型以确保它们被注册到 Base.metadata
         from app.models import models  # noqa: F401
+        from app.models import batch_models  # noqa: F401
         
         # 创建所有表（如果不存在）
         Base.metadata.create_all(bind=engine)

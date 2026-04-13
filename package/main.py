@@ -55,6 +55,7 @@ import uvicorn
 from app.config import settings
 from app.database import init_db
 from app.routes import admin, prompts, optimization
+from app.routes.batch import router as batch_router
 from app.word_formatter import router as word_formatter_router
 from app.word_formatter.services import get_job_manager
 from app.models.models import CustomPrompt
@@ -116,6 +117,7 @@ async def add_no_cache_headers(request: Request, call_next):
 app.include_router(admin.router, prefix="/api")
 app.include_router(prompts.router, prefix="/api")
 app.include_router(optimization.router, prefix="/api")
+app.include_router(batch_router, prefix="/api")
 app.include_router(word_formatter_router, prefix="/api")
 
 
@@ -365,6 +367,15 @@ if os.path.exists(STATIC_DIR):
         if os.path.exists(index_file):
             return FileResponse(index_file)
         return {"error": "Word formatter page not found"}
+
+    @app.get("/batch")
+    @app.get("/batch/{path:path}")
+    async def serve_batch(path: str = ""):
+        """服务批处理页面"""
+        index_file = os.path.join(STATIC_DIR, 'index.html')
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        return {"error": "Batch page not found"}
 
     @app.get("/session/{session_id}")
     async def serve_session(session_id: str):

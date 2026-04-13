@@ -265,4 +265,24 @@ export const wordFormatterAPI = {
   },
 };
 
+// Batch Processing API
+export const batchAPI = {
+  createBatch: (data) =>
+    api.post('/batches', data, { timeout: 30000 }),
+  listBatches: (limit = 20, offset = 0) =>
+    api.get('/batches', { params: { limit, offset }, timeout: 15000 }),
+  getBatch: (batchId) =>
+    api.get(`/batches/${batchId}`, { timeout: 15000 }),
+  startBatch: (batchId) =>
+    api.post(`/batches/${batchId}/start`, null, { timeout: 15000 }),
+  listTasks: (batchId, params = {}) =>
+    api.get(`/batches/${batchId}/tasks`, { params, timeout: 15000 }),
+  retryTask: (taskId) =>
+    api.post(`/batches/tasks/${taskId}/retry`, null, { timeout: 15000 }),
+  retryFailed: (batchId) =>
+    api.post(`/batches/${batchId}/retry-failed`, null, { timeout: 15000 }),
+  exportBatch: (batchId, fmt = 'json') =>
+    api.get(`/batches/${batchId}/export`, { params: { fmt }, timeout: 30000 }),
+};
+
 export default api;

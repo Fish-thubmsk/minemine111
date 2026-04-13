@@ -19,10 +19,17 @@ from app.services.ai_service import (
     get_error_category,
 )
 
-# 配置常量
-BATCH_MAX_RETRIES = 2
-BATCH_RETRY_INTERVAL_SECONDS = 3
-SOURCE_PREVIEW_LENGTH = 30
+
+def _get_max_retries():
+    return settings.BATCH_MAX_RETRIES
+
+
+def _get_retry_interval():
+    return settings.BATCH_RETRY_INTERVAL_SECONDS
+
+
+def _get_preview_length():
+    return settings.SOURCE_PREVIEW_LENGTH
 
 
 def split_paragraphs(
@@ -106,7 +113,7 @@ def create_batch(
     # 创建段落和任务
     for idx, para_text in enumerate(paragraphs, start=1):
         seg_id_str = _generate_segment_id(batch_id_str, idx)
-        preview = para_text[:SOURCE_PREVIEW_LENGTH]
+        preview = para_text[:_get_preview_length()]
         seg = BatchSegment(
             segment_id=seg_id_str,
             batch_id=batch.id,
@@ -124,7 +131,7 @@ def create_batch(
                 segment_id=seg.id,
                 task_type=task_type,
                 status="pending",
-                max_retries=BATCH_MAX_RETRIES,
+                max_retries=_get_max_retries(),
             )
             db.add(task)
 
@@ -199,7 +206,7 @@ async def _run_single_task(
                 task.status = "retrying"
                 task.error_message = f"[重试 {attempt + 1}] {str(exc)[:300]}"
                 db.commit()
-                await asyncio.sleep(BATCH_RETRY_INTERVAL_SECONDS * (attempt + 1))
+                await asyncio.sleep(_get_retry_interval() * (attempt + 1))
             # 继续下一次尝试
 
     # 所有重试用尽, 标记失败
@@ -256,7 +263,7 @@ async def execute_batch(db: Session, batch_id: int):
         .all()
     )
 
-    max_concurrency = settings.MAX_CONCURRENT_USERS
+    max_concurrency = settings.BATCH_MAX_CONCURRENCY
     semaphore = asyncio.Semaphore(max_concurrency)
 
     async def _limited_run(task: SegmentTask):

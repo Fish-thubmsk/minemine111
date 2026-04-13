@@ -28,6 +28,7 @@ from app.services.batch_service import (
     _generate_batch_id,
     _generate_segment_id,
     _text_hash,
+    _get_preview_length,
 )
 
 
@@ -222,7 +223,7 @@ class TestCreateBatch:
         seg = db_session.query(BatchSegment).filter(
             BatchSegment.batch_id == batch.id
         ).first()
-        assert len(seg.source_preview) <= 30
+        assert len(seg.source_preview) <= _get_preview_length()
 
     def test_invalid_task_type_raises(self, db_session, test_user):
         with pytest.raises(ValueError, match="不支持的任务类型"):

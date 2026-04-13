@@ -198,11 +198,18 @@ const BatchPage = () => {
   useEffect(() => {
     if (view !== 'detail' || !currentBatch) return;
     if (!['running', 'pending'].includes(currentBatch.status)) return;
-    const iv = setInterval(() => {
-      openDetail(currentBatch.batch_id);
+    const batchId = currentBatch.batch_id;
+    const iv = setInterval(async () => {
+      try {
+        const bRes = await batchAPI.getBatch(batchId);
+        setCurrentBatch(bRes.data);
+        await loadTasks(batchId, taskPage, statusFilter);
+      } catch {
+        // ignore
+      }
     }, 5000);
     return () => clearInterval(iv);
-  }, [view, currentBatch?.batch_id, currentBatch?.status]);
+  }, [view, currentBatch, taskPage, statusFilter]);
 
   // ── toggle task type ──
   const toggleType = (type) => {

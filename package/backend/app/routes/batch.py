@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.batch_models import Batch, BatchSegment, SegmentTask
 from app.models.models import User
-from app.schemas.batch_schemas import (
+from app.batch_schemas import (
     BatchCreate,
     BatchCreateResponse,
     BatchDetailResponse,

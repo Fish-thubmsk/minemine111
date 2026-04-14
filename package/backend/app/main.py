@@ -11,7 +11,7 @@ from typing import Dict, Tuple, Optional
 # 先导入 config 以便加载环境变量
 from app.config import settings
 from app.database import init_db
-from app.routes import admin, prompts, optimization
+from app.routes import admin, prompts, optimization, batch
 from app.word_formatter import router as word_formatter_router
 from app.word_formatter.services import get_job_manager
 from app.models.models import CustomPrompt
@@ -93,6 +93,7 @@ app.add_middleware(
 app.include_router(admin.router, prefix="/api")
 app.include_router(prompts.router, prefix="/api")
 app.include_router(optimization.router, prefix="/api")
+app.include_router(batch.router, prefix="/api")
 app.include_router(word_formatter_router, prefix="/api")
 
 # 速率限制中间件已移除

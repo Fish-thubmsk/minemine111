@@ -321,6 +321,13 @@ const WorkspacePage = () => {
               )}
               
               <button
+                onClick={() => navigate('/batch')}
+                className="text-ios-blue text-[14px] hover:opacity-70 transition-opacity font-medium bg-blue-50 px-3 py-1 rounded-lg"
+              >
+                批处理
+              </button>
+              
+              <button
                 onClick={handleLogout}
                 className="text-ios-red text-[17px] hover:opacity-70 transition-opacity font-normal"
               >

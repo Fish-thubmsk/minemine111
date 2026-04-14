@@ -9,6 +9,7 @@ import WordFormatterPage from './pages/WordFormatterPage';
 import SpecGeneratorPage from './pages/SpecGeneratorPage';
 import ArticlePreprocessorPage from './pages/ArticlePreprocessorPage';
 import FormatCheckerPage from './pages/FormatCheckerPage';
+import BatchPage from './pages/BatchPage';
 import './index.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -104,6 +105,15 @@ function App() {
           element={
             <ProtectedRoute>
               <FormatCheckerPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/batch"
+          element={
+            <ProtectedRoute>
+              <BatchPage />
             </ProtectedRoute>
           }
         />
